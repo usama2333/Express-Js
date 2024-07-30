@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Die Hard", "releaseYear": 1998, "duration": 90 },
+  { "id": 2, "name": "Aqua man", "releaseYear": 2022, "duration": 120 },
+  { "id": 3, "name": "Doctor Strange", "releaseYear": 2021, "duration": 110 },
+  { "id": 4, "name": "Doctor doomday", "releaseYear": 2026, "duration": 190 }
+]
