@@ -32,6 +32,32 @@ app.get('/api/v1/movies',(req,res) => {
   })
 })
 
+//Get Single movie by Id
+
+app.get('/api/v1/movies/:id',(req, res) => {
+    //req.params gives us a { id: '4' } api endpoint like this
+    //It gives route parameter and its value
+//    console.log(req.params);
+   const id = +req.params.id;
+   const movie = movies.find(el => el.id === id);
+
+   if(!movie) {
+     res.status(404).json({
+        status: 'failed',
+        message: 'The movie with this ' +id+ ' is not found'
+     })
+     return;
+   }
+
+   res.status(200).json({
+    status: 'success',
+    data: {
+        movie
+    }
+   })
+
+})
+
 //Post movies
 app.post('/api/v1/movies',(req, res) => {
    // console.log(req.body);
@@ -55,6 +81,44 @@ app.post('/api/v1/movies',(req, res) => {
     })
    
 
+})
+
+//Patch 
+app.patch('/api/v1/movies/:id', (req, res) => {
+    let id = +req.params.id;
+    let movieToUpdate = movies.find(el => el.id === id);
+    let index = movies.indexOf(movieToUpdate); //eg id=4 , index=3
+
+    if(!movieToUpdate) {
+        res.status(404).json({
+           status: 'failed',
+           message: 'The movie with this ' +id+ ' is not found'
+        })
+        return;
+      }
+
+    Object.assign(movieToUpdate,req.body);
+    movies[index] = movieToUpdate;
+
+   
+
+    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err) => {
+        res.status(200).json({
+            status: 200,
+            data: {
+                movie: movieToUpdate
+            }
+        })
+    })
+
+})
+
+// Delete a movie
+app.delete('/api/v1/movies/:id', (req, res) => {
+    const id = +req.params.id;
+    const movieToDelete = movies.find(el => el.id === id);
+    const index = movies.indexOf(movieToDelete);
+    
 })
 
 // Create a server
