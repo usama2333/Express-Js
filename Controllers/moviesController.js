@@ -2,6 +2,27 @@ const fs = require('fs');
 
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
+//This is a route.param middleware that is export and used in movies routes 
+//Where route contains id 
+//This middleware is executed when there is a id in the params and it will
+//check if id founds or not 
+
+exports.checkId = (req, res, next, value) => {
+    console.log('Movie ID is ' + value)
+  
+    const movie = movies.find(el => el.id === +value);
+
+    if(!movie) {
+      res.status(404).json({
+         status: 'failed',
+         message: 'The movie with this ' +value+ ' is not found'
+      })
+      return;
+    }
+    next()
+
+}
+
 //Creating route handler functions
 
 //exports. is used for multiple exports from single file
@@ -23,13 +44,15 @@ exports.getAllMovies = (req,res) => {
    const id = +req.params.id;
    const movie = movies.find(el => el.id === id);
 
-   if(!movie) {
-     res.status(404).json({
-        status: 'failed',
-        message: 'The movie with this ' +id+ ' is not found'
-     })
-     return;
-   }
+   //This is replaced by router.param middleware that can check this condition
+
+//    if(!movie) {
+//      res.status(404).json({
+//         status: 'failed',
+//         message: 'The movie with this ' +id+ ' is not found'
+//      })
+//      return;
+//    }
 
    res.status(200).json({
     status: 'success',
@@ -67,13 +90,15 @@ exports.createMovie = (req, res) => {
     let movieToUpdate = movies.find(el => el.id === id);
     let index = movies.indexOf(movieToUpdate); //eg id=4 , index=3
 
-    if(!movieToUpdate) {
-        res.status(404).json({
-           status: 'failed',
-           message: 'The movie with this ' +id+ ' is not found'
-        })
-        return;
-      }
+       //This is replaced by router.param middleware that can check this condition
+
+    // if(!movieToUpdate) {
+    //     res.status(404).json({
+    //        status: 'failed',
+    //        message: 'The movie with this ' +id+ ' is not found'
+    //     })
+    //     return;
+    //   }
 
     Object.assign(movieToUpdate,req.body);
     movies[index] = movieToUpdate;
@@ -95,12 +120,14 @@ exports.deleteMovie = (req, res) => {
     const id = +req.params.id;
     const movieToDelete = movies.find(el => el.id === id);
 
-    if(!movieToDelete) {
-        res.status(404).json({
-            status: 'failed',
-            message: 'Movie with this id ' +id+ 'is not found'
-        })
-    }
+       //This is replaced by router.param middleware that can check this condition
+       
+    // if(!movieToDelete) {
+    //     res.status(404).json({
+    //         status: 'failed',
+    //         message: 'Movie with this id ' +id+ 'is not found'
+    //     })
+    // }
     const index = movies.indexOf(movieToDelete);
 
     movies.splice(index,1);
