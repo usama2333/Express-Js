@@ -28,7 +28,12 @@ app.use(express.json())
 //here use third party middleware morgan
 //When use third party middleware functions we need to call with () that returns middleware
 //morgan is used to log api info like get , status, how much time it takes
-app.use(morgan('dev'))
+
+//condtion for run this only in development
+if(process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'))
+}
+
 //morgan middleware logs the api request in terminal
 //GET /api/v1/movies/ 200 14.759 ms - 351
 
