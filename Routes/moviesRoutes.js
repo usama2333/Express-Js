@@ -21,12 +21,13 @@ const router = express.Router();
 
 
 //moviesController have the checkId param middleware that can used here on id type routes
+//This checkid middleware is defined in the movies controller
 router.param('id',moviesController.checkId)
 
 
 router.route('/')
     .get(moviesController.getAllMovies)
-    .post(moviesController.createMovie)
+    .post(moviesController.validateBody, moviesController.createMovie) 
 
     router.route('/:id')
     .get(moviesController.getMovie)

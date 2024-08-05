@@ -32,6 +32,16 @@ app.use(morgan('dev'))
 //morgan middleware logs the api request in terminal
 //GET /api/v1/movies/ 200 14.759 ms - 351
 
+
+//Using express.static middleware to call static pages directly
+//With this we can show static pages on browser
+// http://localhost:3000/templates/demo.html
+//we dont need to enter public keyword in route 
+//here the file is placed in public/templates/demo.html
+app.use(express.static('./public'));
+
+
+
 // app.use() is used to call middleware
 app.use(logger)
 
