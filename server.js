@@ -1,6 +1,9 @@
 //always use dotenv at the top before the app
 const dotenv = require('dotenv')
 
+//mongoose can set the mongodb connection
+const mongoose = require('mongoose')
+
 //here we can give our config.env file path 
 //then it can setup our variables into .env and we can access it easily
 //now we can acces these varaibles through process.env it will added it into 
@@ -22,6 +25,24 @@ console.log(app.get('env'))
 //process in the core module of node js which means us we run the app these variables are set
 //we can use these variables everywhere without require and import or export
 console.log(process.env)
+
+//here we can set the mongodb connection with mongoose
+//here we set the CONN_STR and newURlParse to true
+//mongoose.connect give us a promise in which also give a conn object 
+//when connection successfull then it run the then condition
+
+
+mongoose.connect(process.env.CONN_STR, {
+    useNewUrlParser: true
+}).then((conn) => {
+    console.log(conn);
+    console.log('DB connection succesfull')
+
+}).catch((error) => {
+    console.log('Some error has occured')
+})
+
+
 
 // Create a server
 // const port = 3000;

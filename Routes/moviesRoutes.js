@@ -24,7 +24,6 @@ const router = express.Router();
 //This checkid middleware is defined in the movies controller
 router.param('id',moviesController.checkId)
 
-
 router.route('/')
     .get(moviesController.getAllMovies)
     .post(moviesController.validateBody, moviesController.createMovie) 
@@ -35,3 +34,4 @@ router.route('/')
     .delete(moviesController.deleteMovie)
 
 module.exports = router;
+
