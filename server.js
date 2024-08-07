@@ -43,40 +43,6 @@ mongoose.connect(process.env.CONN_STR, {
 })
 
 
-//here we can create a schema with mongoose to valiate the document
-const movieSchema = new mongoose.Schema({
-    // name: String,
-    name: {
-        type: String,
-        // required: true
-        required: [true, 'name is required field'],
-        unique: true
-    },
-    description: String,
-    // duration: Number,
-    duration: {
-        type: Number,
-        // required: true
-        required: [true, 'duration is required field']
-    },
-    // ratings: Number
-    ratings: {
-        type: Number,
-        default: 1.0
-    }
-})
-
-//mongoose.modal() create collection in database and gives a modal through which
-//we can handle crud
-//mongoose.modal() takes two things 
-//first it creates the collection in the database with Movies (parular) name
-//second is the movieSchema through which it validates the document  
-//here we are creating a movie modal with this we can create update 
-//and document in the database with movie variable
-
-const movie = mongoose.model('Movie',movieSchema)
-
-
 // Create a server
 // const port = 3000;
 
