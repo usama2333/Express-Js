@@ -1,21 +1,6 @@
 
-const Movie = require('../Models/movieModel');
+const Movie = require('../Models/movieModel') 
 
-
-//Request body middleware for post request
-//This will be used in post request to check for correct body
-//     .post(moviesController.validateBody, moviesController.createMovie) 
-exports.validateBody = (req, res, next) => {
-    if(!req.body.name || !req.body.releaseYear) {
-        res.status(400).json({
-            status: 'Failed',
-            message: 'Not a valid movie data'
-        })
-        return;
-    }
-    next();
-   
-}
 
 //Creating route handler functions
 
@@ -29,7 +14,27 @@ exports.getAllMovies = (req,res) => {
 
 }
 
-exports.createMovie = (req, res) => {
+exports.createMovie = async (req, res) => {
+    try{
+        //Movie model have a create function that creates the document in db
+        //req.body have movie data coming from req
+        const movie = await Movie.create(req.body)
+        //here simple send res
+        res.status(201).json({
+            status: 'success',
+            data: {
+                movie
+            }
+        })
+
+    }catch(err){
+        res.status(400).json({
+            status: 'failed',
+            message: err.message
+        })
+
+    }
+
    
  }
 
