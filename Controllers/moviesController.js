@@ -6,8 +6,18 @@ const Movie = require('../Models/movieModel')
 //exports. is used for multiple exports from single file
 exports.getAllMovies = async (req, res) => {
     try {
+        console.log(req.query)
+        //req.query will gives the extra query parameters used for filtering
+        //and it always give the values in the form of string
+        //{ duration: '90', rating: '9' }
+
+
         //Movie.find will returns all movies
-        const movies = await Movie.find()
+        //  const movies = await Movie.find()
+        
+        //if added any query then it will filter the document 
+        // e.g 127.0.0.1:3000/api/v1/movies/?duration=152&ratings=9
+        const movies = await Movie.find(req.query)
 
         res.status(200).json({
             status: 'success',
