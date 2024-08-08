@@ -3,25 +3,58 @@ const mongoose = require('mongoose')
 
 //here we can create a schema with mongoose to valiate the document
 const movieSchema = new mongoose.Schema({
-    // name: String,
     name: {
         type: String,
-        // required: true
-        required: [true, 'name is required field'],
-        unique: true
+        required: [true, 'Name is required field'],
+        unique: true,
+        trim: true   //if can remove whitespaces before and after the name
     },
-    description: String,
-    // duration: Number,
+    description: {
+        type: String,
+        required: [true, 'Description is required field'],
+        trim: true
+    },
     duration: {
         type: Number,
         // required: true
-        required: [true, 'duration is required field']
+        required: [true, 'Duration is required field']
     },
     // ratings: Number
     ratings: {
         type: Number,
-        default: 1.0
-    }
+        // default: 1.0
+    },
+    totalRating: {
+        type: Number
+    },
+    releaseYear: {
+        type: Number,
+        required: [true, 'Release year is required field']
+    },
+    releaseDate: {
+        type: Date
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
+    genres: {
+        type: [String],  // String array
+        required: [true, 'Genrus is required field']
+    },
+    directors: {
+        type: [String],  // String array
+        required: [true, 'Directors is required field']
+    },
+    coverImage: {
+        type: [String],  // String array
+        required: [true, 'Cover Image is required field']
+    },
+    price: {
+        type: Number,
+        required: [true, 'Price is required field']
+    },
+
 })
 
 //mongoose.modal() create collection in database and gives a modal through which
