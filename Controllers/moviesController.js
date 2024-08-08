@@ -14,10 +14,30 @@ exports.getAllMovies = async (req, res) => {
 
         //Movie.find will returns all movies
         //  const movies = await Movie.find()
-        
+
+
+        //if req.query is not work due to extra fields then remove the extra fields
+        //for exclude some extra fields in the req.query to filter works properly
+       
+        const excludeFields = ['sort', 'page', 'limit', 'fields']
+
+        //we make a shallow copy with spread operator that creates a new object with same properties
+        const queryObj = {...req.query}
+
+       //here delete the sort,page,limit and fields in the queryObj
+        excludeFields.forEach((el) => {
+          delete queryObj[el]
+        })
+
+
         //if added any query then it will filter the document 
         // e.g 127.0.0.1:3000/api/v1/movies/?duration=152&ratings=9
-        const movies = await Movie.find(req.query)
+
+        // const movies = await Movie.find(req.query)
+
+        //127.0.0.1:3000/api/v1/movies/?duration=152&ratings=9&page=12
+        //this is the exclude fields queryObj i will remove page=12 in query
+        const movies = await Movie.find(queryObj)
 
         res.status(200).json({
             status: 'success',
