@@ -22,12 +22,12 @@ exports.getAllMovies = async (req, res) => {
         const excludeFields = ['sort', 'page', 'limit', 'fields']
 
         //we make a shallow copy with spread operator that creates a new object with same properties
-        const queryObj = {...req.query}
+        // const queryObj = {...req.query}
 
        //here delete the sort,page,limit and fields in the queryObj
-        excludeFields.forEach((el) => {
-          delete queryObj[el]
-        })
+        // excludeFields.forEach((el) => {
+        //   delete queryObj[el]
+        // })
 
 
         //if added any query then it will filter the document 
@@ -37,6 +37,20 @@ exports.getAllMovies = async (req, res) => {
 
         //127.0.0.1:3000/api/v1/movies/?duration=152&ratings=9&page=12
         //this is the exclude fields queryObj i will remove page=12 in query
+
+      ///advance filtereing
+      //127.0.0.1:3000/api/v1/movies/?duration[gte]=140&rattings[gte]=9&price[lte]=70
+      //output {duration: { gte: '140' },rattings: { gte: '9' },price: { lte: '70' }}
+      // but we want {duration: { $gte: '140' },rattings: { $gte: '9' },
+      // price: { $lte: '70' }} to apply advance filtering 
+
+      let queryStr = JSON.stringify(req.query);
+      queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+      const queryObj = JSON.parse(queryStr);
+
+      console.log(queryObj,'advance filtering')
+
+
         const movies = await Movie.find(queryObj)
 
         res.status(200).json({
