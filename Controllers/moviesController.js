@@ -51,7 +51,21 @@ exports.getAllMovies = async (req, res) => {
       console.log(queryObj,'advance filtering')
 
 
-        const movies = await Movie.find(queryObj)
+    //   remove await here for sorting
+        // const movies = await Movie.find(queryObj);
+        let query = Movie.find(queryObj);
+
+        // for sorting
+        if(req.query.sort){
+          const sortBy = req.query.sort.split(',').join(' ')
+          query =  query.sort(sortBy)
+        }else {
+            query = query.sort('-createdAt')
+        }
+
+        const movies = await query;
+
+
 
         res.status(200).json({
             status: 'success',
