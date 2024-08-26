@@ -6,7 +6,7 @@ const Movie = require('../Models/movieModel')
 //exports. is used for multiple exports from single file
 exports.getAllMovies = async (req, res) => {
     try {
-        console.log(req.query)
+        // console.log(req.query)
         //req.query will gives the extra query parameters used for filtering
         //and it always give the values in the form of string
         //{ duration: '90', rating: '9' }
@@ -48,21 +48,30 @@ exports.getAllMovies = async (req, res) => {
       queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
       const queryObj = JSON.parse(queryStr);
 
-      console.log(queryObj,'advance filtering')
+    //   console.log(queryObj,'advance filtering')
 
 
     //   remove await here for sorting
         // const movies = await Movie.find(queryObj);
-        let query = Movie.find(queryObj);
+
+        //for filtering logic use this below
+        // let query = Movie.find(queryObj);
+
+        //for sorting,limit,and pagination use this
+             let query = Movie.find();
 
         // for sorting logic
-        if(req.query.sort){
-          const sortBy = req.query.sort.split(',').join(' ')
-          query =  query.sort(sortBy)
-        }else {
-            query = query.sort('-createdAt')
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            console.log("Sort By:", sortBy); // Log to check the sort criteria
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort('-createdAt');
         }
 
+        //127.0.0.1:3000/api/v1/movies/?fields=-price it removes price
+        //127.0.0.1:3000/api/v1/movies/?fields=-price it only display price
+        
         // Limiting logic
         if(req.query.fields){
             const fields = req.query.fields.split(',').join(' ');
@@ -73,9 +82,23 @@ exports.getAllMovies = async (req, res) => {
             query = query.select('-__v')
         }
 
+        //Pagination
+        //127.0.0.1:3000/api/v1/movies/?page=2&limit=10
+        const page = req.query.page*1 || 1;
+        const limit = req.query.limit*1 || 10;
+
+        //Page 1 = 1-10, page2 = 11 - 20 , page3 = 21-30
+        const skip = (page-1) * limit; //This is give skip limit
+        query = query.skip(skip).limit(limit);
+
+        if(req.query.page){
+            const moviesCount = await Movie.countDocuments(); //This retuen all documents
+            if(skip >= moviesCount){
+                throw new Error("This page is not found")
+            }
+        }
+
         const movies = await query;
-
-
 
         res.status(200).json({
             status: 'success',
