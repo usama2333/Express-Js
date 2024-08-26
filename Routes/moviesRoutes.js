@@ -24,11 +24,15 @@ const router = express.Router();
 //This checkid middleware is defined in the movies controller
 // router.param('id',moviesController.checkId)
 
+
+router.route('/higest-rated')
+    .get(moviesController.getHigestRated, moviesController.getAllMovies)
+
 router.route('/')
     .get(moviesController.getAllMovies)
-    .post(moviesController.createMovie) 
+    .post(moviesController.createMovie)
 
-    router.route('/:id')
+router.route('/:id')
     .get(moviesController.getMovie)
     .patch(moviesController.updateMovie)
     .delete(moviesController.deleteMovie)

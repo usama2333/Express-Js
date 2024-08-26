@@ -3,6 +3,15 @@ const Movie = require('../Models/movieModel')
 
 //Creating route handler functions
 
+// exporting the middleware for limit and rating
+//This will set the limit and sort then the api works accordingly
+exports.getHigestRated = (req,res,next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratings';
+    next();
+
+}
+
 //exports. is used for multiple exports from single file
 exports.getAllMovies = async (req, res) => {
     try {
