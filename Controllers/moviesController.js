@@ -55,12 +55,22 @@ exports.getAllMovies = async (req, res) => {
         // const movies = await Movie.find(queryObj);
         let query = Movie.find(queryObj);
 
-        // for sorting
+        // for sorting logic
         if(req.query.sort){
           const sortBy = req.query.sort.split(',').join(' ')
           query =  query.sort(sortBy)
         }else {
             query = query.sort('-createdAt')
+        }
+
+        // Limiting logic
+        if(req.query.fields){
+            const fields = req.query.fields.split(',').join(' ');
+            console.log(fields,'...Fields')
+            query = query.select(fields)
+
+        } else{
+            query = query.select('-__v')
         }
 
         const movies = await query;
